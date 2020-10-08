@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core';
+import { ThemeProvider, withStyles } from '@material-ui/core';
 import styles from './styles';
+import Taskboard from '../Taskboard';
+import theme from '../../commons/Theme';
 
 class App extends Component {
   render() {
-    const { classes } = this.props;
-
     return (
-      <div className='App'>
-        <h1 className={classes.demo}>Hello</h1>
-      </div>
+      <ThemeProvider theme={theme}>
+        <Taskboard />
+      </ThemeProvider>
     );
   }
 }
