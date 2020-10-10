@@ -1,6 +1,9 @@
 const styles = (theme) => ({
-  demo: {
-    color: theme.color.primary,
+  status: {
+    margin: '15px 0',
+  },
+  card: {
+    marginBottom: '15px',
   },
 });
 
