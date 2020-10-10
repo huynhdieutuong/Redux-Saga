@@ -1,40 +1,33 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Typography,
-  withStyles,
-} from '@material-ui/core';
+import { Button, Grid, withStyles } from '@material-ui/core';
 import styles from './styles';
 import { STATUSES } from '../../contants';
 import AddIcon from '@material-ui/icons/Add';
+import TaskList from '../../components/TaskList';
 
 const taskList = [
   {
     id: 0,
     title: 'Read book',
-    description: '',
+    description: 'Read material UI book',
     status: 0,
   },
   {
     id: 1,
     title: 'Play game',
-    description: '',
+    description: 'Play pokemon game',
     status: 1,
   },
   {
     id: 2,
     title: 'Sleep',
-    description: '',
+    description: 'Sleep 2 hours',
     status: 2,
   },
   {
     id: 3,
     title: 'Eat',
-    description: '',
+    description: 'Eat breakfast',
     status: 2,
   },
 ];
@@ -48,25 +41,7 @@ class Taskboard extends Component {
           <Grid item md={4} xs={12} key={index}>
             <div className={classes.status}>{status.label}</div>
             <div className={classes.wrapperListTask}>
-              {taskList
-                .filter((task) => task.status === status.value)
-                .map((task) => (
-                  <Card key={task.id} className={classes.card}>
-                    <CardContent>
-                      <Grid container justify='space-between'>
-                        <Grid item md={8}>
-                          <Typography component='h2'>{task.title}</Typography>
-                        </Grid>
-                        <Grid item md={4}>
-                          {status.label}
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                    <CardActions>
-                      <Button size='small'>Edit</Button>
-                    </CardActions>
-                  </Card>
-                ))}
+              <TaskList tasks={taskList} status={status} key={index} />
             </div>
           </Grid>
         ))}
