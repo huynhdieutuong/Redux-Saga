@@ -31,16 +31,16 @@ export const fetchListTaskFailed = (error) => {
  * Step3: fetchListTaskSuccess()
  *        fetchListTaskFailed()
  */
-export const fetchListTaskRequest = () => {
-  return (dispatch) => {
-    dispatch(fetchListTask());
-    taskApis
-      .getList()
-      .then((res) => {
-        dispatch(fetchListTaskSuccess(res.data));
-      })
-      .catch((error) => {
-        dispatch(fetchListTaskFailed(error));
-      });
-  };
-};
+// export const fetchListTaskRequest = () => {
+//   return (dispatch) => {
+//     dispatch(fetchListTask());
+//     taskApis
+//       .getList()
+//       .then((res) => {
+//         dispatch(fetchListTaskSuccess(res.data));
+//       })
+//       .catch((error) => {
+//         dispatch(fetchListTaskFailed(error));
+//       });
+//   };
+// };
