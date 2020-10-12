@@ -5,33 +5,9 @@ import { STATUSES } from '../../contants';
 import AddIcon from '@material-ui/icons/Add';
 import TaskList from '../../components/TaskList';
 import TaskForm from '../../components/TaskForm';
+import PropTypes from 'prop-types';
 
-const taskList = [
-  {
-    id: 0,
-    title: 'Read book',
-    description: 'Read material UI book',
-    status: 0,
-  },
-  {
-    id: 1,
-    title: 'Play game',
-    description: 'Play pokemon game',
-    status: 1,
-  },
-  {
-    id: 2,
-    title: 'Sleep',
-    description: 'Sleep 2 hours',
-    status: 2,
-  },
-  {
-    id: 3,
-    title: 'Eat',
-    description: 'Eat breakfast',
-    status: 2,
-  },
-];
+const taskList = [];
 
 class Taskboard extends Component {
   state = {
@@ -90,5 +66,9 @@ class Taskboard extends Component {
     );
   }
 }
+
+Taskboard.propTypes = {
+  classes: PropTypes.object,
+};
 
 export default withStyles(styles)(Taskboard);

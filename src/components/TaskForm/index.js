@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import styles from './styles';
 import { STATUSES } from '../../contants/index';
+import PropTypes from 'prop-types';
 
 class TaskForm extends Component {
   state = {
@@ -80,5 +81,11 @@ class TaskForm extends Component {
     );
   }
 }
+
+TaskForm.propTypes = {
+  classes: PropTypes.object,
+  open: PropTypes.bool.isRequired,
+  onCloseForm: PropTypes.func.isRequired,
+};
 
 export default withStyles(styles)(TaskForm);
