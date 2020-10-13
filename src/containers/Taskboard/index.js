@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { Component } from 'react';
 import { Button, Grid, withStyles } from '@material-ui/core';
 import styles from './styles';
@@ -9,6 +10,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as taskActions from '../../actions/task';
+import SearchBox from '../../components/SearchBox';
 
 class Taskboard extends Component {
   state = {
@@ -35,7 +37,7 @@ class Taskboard extends Component {
   };
 
   renderBoard() {
-    const { classes, listTask } = this.props;
+    const { classes, filterTask } = this.props;
 
     return (
       <Grid container spacing={2}>
@@ -43,7 +45,7 @@ class Taskboard extends Component {
           <Grid item md={4} xs={12} key={index}>
             <div className={classes.status}>{status.label}</div>
             <div className={classes.wrapperListTask}>
-              <TaskList tasks={listTask} status={status} key={index} />
+              <TaskList tasks={filterTask} status={status} key={index} />
             </div>
           </Grid>
         ))}
@@ -53,6 +55,16 @@ class Taskboard extends Component {
 
   renderForm() {
     return <TaskForm open={this.state.open} onCloseForm={this.handleClose} />;
+  }
+
+  handleFilter = (e) => {
+    const { taskActionCreators } = this.props;
+    const { filterTask } = taskActionCreators;
+    filterTask(e.target.value);
+  };
+
+  renderSearchBox() {
+    return <SearchBox handleChange={this.handleFilter} />;
   }
 
   render() {
@@ -68,6 +80,7 @@ class Taskboard extends Component {
         >
           Add task
         </Button>
+        {this.renderSearchBox()}
         {this.renderBoard()}
         {this.renderForm()}
       </div>
@@ -80,12 +93,15 @@ Taskboard.propTypes = {
   taskActionCreators: PropTypes.shape({
     fetchListTaskRequest: PropTypes.func,
     fetchListTask: PropTypes.func,
+    filterTask: PropTypes.func,
   }),
   listTask: PropTypes.array,
+  filterTask: PropTypes.array,
 };
 
 const mapStateToProps = (state) => ({
   listTask: state.task.listTask,
+  filterTask: state.task.filterTask,
 });
 
 const mapDispatchToProps = (dispatch) => {
