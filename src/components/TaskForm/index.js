@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
 import {
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
+  Grid,
   MenuItem,
   TextField,
   withStyles,
 } from '@material-ui/core';
-import styles from './styles';
-import { STATUSES } from '../../contants/index';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
+import * as modalActions from '../../actions/modal';
+import { STATUSES } from '../../contants/index';
+import styles from './styles';
 
 class TaskForm extends Component {
   state = {
@@ -25,67 +25,68 @@ class TaskForm extends Component {
   };
 
   render() {
-    const { classes, open, onCloseForm } = this.props;
+    const { classes, modalActionCreators } = this.props;
+    const { hideModal } = modalActionCreators;
     const { status } = this.state;
 
     return (
-      <Dialog
-        open={open}
-        onClose={onCloseForm}
-        aria-labelledby='form-dialog-title'
-      >
-        <DialogTitle id='form-dialog-title'>Add new task</DialogTitle>
-        <DialogContent className={classes.dialogContent}>
-          <TextField
-            autoFocus
-            margin='dense'
-            id='title'
-            label='Title'
-            type='title'
-            fullWidth
-            className={classes.textField}
-          />
-          <TextField
-            id='standard-select-currency'
-            select
-            label='Status'
-            value={status}
-            onChange={this.handleChangeStatus}
-            fullWidth
-            className={classes.textField}
-          >
-            {STATUSES.map((status) => (
-              <MenuItem key={status.value} value={status.value}>
-                {status.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            id='standard-multiline-static'
-            label='Description'
-            multiline
-            rows={4}
-            fullWidth
-            className={classes.textField}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onCloseForm} color='primary'>
+      <form>
+        <TextField
+          autoFocus
+          margin='dense'
+          id='title'
+          label='Title'
+          type='title'
+          fullWidth
+          className={classes.textField}
+        />
+        <TextField
+          id='standard-select-currency'
+          select
+          label='Status'
+          value={status}
+          onChange={this.handleChangeStatus}
+          fullWidth
+          className={classes.textField}
+        >
+          {STATUSES.map((status) => (
+            <MenuItem key={status.value} value={status.value}>
+              {status.label}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          id='standard-multiline-static'
+          label='Description'
+          multiline
+          rows={4}
+          fullWidth
+          className={classes.textField}
+        />
+        <Grid container justify='flex-end'>
+          <Button onClick={hideModal} color='secondary'>
             Cancel
           </Button>
-          <Button onClick={onCloseForm} color='primary'>
+          <Button onClick={hideModal} color='primary'>
             Add
           </Button>
-        </DialogActions>
-      </Dialog>
+        </Grid>
+      </form>
     );
   }
 }
 
 TaskForm.propTypes = {
   classes: PropTypes.object,
-  open: PropTypes.bool.isRequired,
-  onCloseForm: PropTypes.func.isRequired,
+  modalActionCreators: PropTypes.shape({
+    hideModal: PropTypes.func,
+  }),
 };
 
-export default withStyles(styles)(TaskForm);
+const mapDispatchToProps = (dispatch) => ({
+  modalActionCreators: bindActionCreators(modalActions, dispatch),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
+
+export default compose(withStyles(styles), withConnect)(TaskForm);
