@@ -19,6 +19,8 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         open: false,
+        title: '',
+        component: null,
       };
     case modalTypes.CHANGE_MODAL_TITLE:
       return {
