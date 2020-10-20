@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 import * as modalActions from '../../actions/modal';
+import * as taskActions from '../../actions/task';
 import { STATUSES } from '../../contants/index';
 import renderSelectField from '../FormHelper/SelectField';
 import renderTextField from '../FormHelper/TextField';
@@ -13,8 +14,8 @@ import validate from './validate';
 
 class TaskForm extends Component {
   handleSubmitForm = (data) => {
-    console.log({ data });
-    this.props.modalActionCreators.hideModal();
+    data.status = parseInt(data.status);
+    this.props.taskActionCreators.addTask(data);
   };
 
   render() {
@@ -87,6 +88,9 @@ TaskForm.propTypes = {
   modalActionCreators: PropTypes.shape({
     hideModal: PropTypes.func,
   }),
+  taskActionCreators: PropTypes.shape({
+    addTask: PropTypes.func,
+  }),
   handleSubmit: PropTypes.func,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
@@ -94,6 +98,7 @@ TaskForm.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   modalActionCreators: bindActionCreators(modalActions, dispatch),
+  taskActionCreators: bindActionCreators(taskActions, dispatch),
 });
 
 const withConnect = connect(null, mapDispatchToProps);

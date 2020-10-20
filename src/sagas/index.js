@@ -6,16 +6,20 @@ import {
   delay,
   takeLatest,
   select,
+  takeEvery,
 } from 'redux-saga/effects';
 import * as taskTypes from '../contants/task';
-import { getList } from '../apis/task';
+import { getList, addTask } from '../apis/task';
 import { STATUS_CODE } from '../contants';
 import {
   fetchListTaskSuccess,
   fetchListTaskFailed,
   filterTaskSuccess,
+  addTaskSuccess,
+  addTaskFailed,
 } from '../actions/task';
 import { showLoading, hideLoading } from '../actions/ui';
+import { hideModal } from '../actions/modal';
 
 /**
  * Step1: Start action fetch task
@@ -52,9 +56,22 @@ function* filterTaskSaga({ payload }) {
   yield put(filterTaskSuccess(filteredTask));
 }
 
+function* addTaskSaga({ payload }) {
+  yield put(showLoading());
+  const res = yield call(addTask, payload.newTask);
+  yield put(hideLoading());
+  if (res.status === STATUS_CODE.CREATED) {
+    yield put(addTaskSuccess(res.data));
+    yield put(hideModal());
+  } else {
+    yield put(addTaskFailed(res.error));
+  }
+}
+
 function* rootSaga() {
   yield fork(watchFetchListTaskAction);
   yield takeLatest(taskTypes.FILTER_TASK, filterTaskSaga);
+  yield takeEvery(taskTypes.ADD_TASK, addTaskSaga);
 }
 
 export default rootSaga;
