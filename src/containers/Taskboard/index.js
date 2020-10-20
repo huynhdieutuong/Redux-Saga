@@ -33,7 +33,7 @@ class Taskboard extends Component {
   };
 
   renderBoard() {
-    const { classes, filterTask } = this.props;
+    const { classes, listTask } = this.props;
 
     return (
       <Grid container spacing={2}>
@@ -41,7 +41,7 @@ class Taskboard extends Component {
           <Grid item md={4} xs={12} key={index}>
             <div className={classes.status}>{status.label}</div>
             <div className={classes.wrapperListTask}>
-              <TaskList tasks={filterTask} status={status} key={index} />
+              <TaskList tasks={listTask} status={status} key={index} />
             </div>
           </Grid>
         ))}

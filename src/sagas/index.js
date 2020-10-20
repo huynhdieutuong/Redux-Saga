@@ -17,6 +17,7 @@ import {
   filterTaskSuccess,
   addTaskSuccess,
   addTaskFailed,
+  fetchListTask,
 } from '../actions/task';
 import { showLoading, hideLoading } from '../actions/ui';
 import { hideModal } from '../actions/modal';
@@ -32,28 +33,35 @@ import { hideModal } from '../actions/modal';
  * Step5: Start continue actions
  */
 function* watchFetchListTaskAction() {
-  yield take(taskTypes.FETCH_TASK);
-  yield put(showLoading());
-  const res = yield call(getList);
-  yield delay(1000);
-  yield put(hideLoading());
-  if (res.status === STATUS_CODE.SUCCESS) {
-    yield put(fetchListTaskSuccess(res.data));
-  } else {
-    yield put(fetchListTaskFailed(res.error));
+  while (true) {
+    const action = yield take(taskTypes.FETCH_TASK);
+    yield put(showLoading());
+    const res = yield call(getList, action.payload.params);
+    yield delay(1000);
+    yield put(hideLoading());
+    if (res.status === STATUS_CODE.SUCCESS) {
+      yield put(fetchListTaskSuccess(res.data));
+    } else {
+      yield put(fetchListTaskFailed(res.error));
+    }
   }
 }
 
 function* filterTaskSaga({ payload }) {
   yield delay(500);
-  const list = yield select((state) => state.task.listTask);
-  const filteredTask = list.filter((task) =>
-    task.title
-      .trim()
-      .toLowerCase()
-      .includes(payload.keyword.trim().toLowerCase())
+  // const list = yield select((state) => state.task.listTask);
+  // const filteredTask = list.filter((task) =>
+  //   task.title
+  //     .trim()
+  //     .toLowerCase()
+  //     .includes(payload.keyword.trim().toLowerCase())
+  // );
+  // yield put(filterTaskSuccess(filteredTask));
+  yield put(
+    fetchListTask({
+      q: payload.keyword,
+    })
   );
-  yield put(filterTaskSuccess(filteredTask));
 }
 
 function* addTaskSaga({ payload }) {
