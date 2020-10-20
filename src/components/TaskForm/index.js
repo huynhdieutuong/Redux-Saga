@@ -16,6 +16,30 @@ class TaskForm extends Component {
     this.props.modalActionCreators.hideModal();
   };
 
+  required = (value) => {
+    let error = 'Required';
+    if (value && value.trim() !== '') {
+      error = null;
+    }
+    return error;
+  };
+
+  maxLength = (value) => {
+    let error = null;
+    if (value && value.length > 100) {
+      error = 'Max length 100 characters';
+    }
+    return error;
+  };
+
+  minLength = (value) => {
+    let error = null;
+    if (value && value.length < 5) {
+      error = 'Min length 5 characters';
+    }
+    return error;
+  };
+
   render() {
     const { classes, modalActionCreators, handleSubmit } = this.props;
     const { hideModal } = modalActionCreators;
@@ -32,6 +56,7 @@ class TaskForm extends Component {
           fullWidth
           className={classes.textField}
           component={renderTextField}
+          validate={[this.required, this.minLength, this.maxLength]}
         />
         <Field
           id='standard-select-currency'
