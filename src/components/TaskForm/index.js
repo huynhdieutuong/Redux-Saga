@@ -6,9 +6,10 @@ import { bindActionCreators, compose } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 import * as modalActions from '../../actions/modal';
 import { STATUSES } from '../../contants/index';
-import renderTextField from '../FormHelper/TextField';
 import renderSelectField from '../FormHelper/SelectField';
+import renderTextField from '../FormHelper/TextField';
 import styles from './styles';
+import validate from './validate';
 
 class TaskForm extends Component {
   handleSubmitForm = (data) => {
@@ -16,32 +17,14 @@ class TaskForm extends Component {
     this.props.modalActionCreators.hideModal();
   };
 
-  required = (value) => {
-    let error = 'Required';
-    if (value && value.trim() !== '') {
-      error = null;
-    }
-    return error;
-  };
-
-  maxLength = (value) => {
-    let error = null;
-    if (value && value.length > 100) {
-      error = 'Max length 100 characters';
-    }
-    return error;
-  };
-
-  minLength = (value) => {
-    let error = null;
-    if (value && value.length < 5) {
-      error = 'Min length 5 characters';
-    }
-    return error;
-  };
-
   render() {
-    const { classes, modalActionCreators, handleSubmit } = this.props;
+    const {
+      classes,
+      modalActionCreators,
+      handleSubmit,
+      invalid,
+      submitting,
+    } = this.props;
     const { hideModal } = modalActionCreators;
 
     return (
@@ -56,7 +39,6 @@ class TaskForm extends Component {
           fullWidth
           className={classes.textField}
           component={renderTextField}
-          validate={[this.required, this.minLength, this.maxLength]}
         />
         <Field
           id='standard-select-currency'
@@ -87,7 +69,11 @@ class TaskForm extends Component {
           <Button onClick={hideModal} color='secondary'>
             Cancel
           </Button>
-          <Button color='primary' type='submit'>
+          <Button
+            color='primary'
+            type='submit'
+            disabled={invalid || submitting}
+          >
             Add
           </Button>
         </Grid>
@@ -102,6 +88,8 @@ TaskForm.propTypes = {
     hideModal: PropTypes.func,
   }),
   handleSubmit: PropTypes.func,
+  invalid: PropTypes.bool,
+  submitting: PropTypes.bool,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -112,6 +100,7 @@ const withConnect = connect(null, mapDispatchToProps);
 
 const withReduxForm = reduxForm({
   form: 'TASK_MANAGEMENT',
+  validate,
 });
 
 export default compose(
