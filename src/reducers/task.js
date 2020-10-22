@@ -3,6 +3,7 @@ import * as taskConstants from '../contants/task';
 
 const initialState = {
   listTask: [],
+  taskEditing: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -48,6 +49,12 @@ const reducer = (state = initialState, action) => {
       toastError(payload.error);
       return {
         ...state,
+      };
+    }
+    case taskConstants.SET_TASK_EDITING: {
+      return {
+        ...state,
+        taskEditing: payload.task,
       };
     }
     default:

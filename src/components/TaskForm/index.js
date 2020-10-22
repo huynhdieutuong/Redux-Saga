@@ -94,6 +94,7 @@ TaskForm.propTypes = {
   handleSubmit: PropTypes.func,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
+  initialValues: PropTypes.object,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -101,7 +102,11 @@ const mapDispatchToProps = (dispatch) => ({
   taskActionCreators: bindActionCreators(taskActions, dispatch),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const mapStateToProps = (state) => ({
+  initialValues: state.task.taskEditing,
+});
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReduxForm = reduxForm({
   form: 'TASK_MANAGEMENT',

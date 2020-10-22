@@ -11,10 +11,11 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import styles from './styles';
+import PropTypes from 'prop-types';
 
 class TaskItem extends Component {
   render() {
-    const { classes, task, status } = this.props;
+    const { classes, task, status, onClickEdit } = this.props;
 
     return (
       <Card className={classes.card}>
@@ -39,6 +40,7 @@ class TaskItem extends Component {
             color='primary'
             aria-label='edit'
             className={classes.margin}
+            onClick={() => onClickEdit(task)}
           >
             <EditIcon />
           </Fab>
@@ -55,5 +57,12 @@ class TaskItem extends Component {
     );
   }
 }
+
+TaskItem.propTypes = {
+  classes: PropTypes.object,
+  task: PropTypes.object,
+  status: PropTypes.object,
+  onClickEdit: PropTypes.func,
+};
 
 export default withStyles(styles)(TaskItem);
