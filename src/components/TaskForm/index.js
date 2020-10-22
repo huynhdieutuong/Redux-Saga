@@ -1,4 +1,4 @@
-import { Button, Grid, withStyles } from '@material-ui/core';
+import { Button, Grid, MenuItem, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -15,7 +15,11 @@ import validate from './validate';
 class TaskForm extends Component {
   handleSubmitForm = (data) => {
     data.status = parseInt(data.status);
-    this.props.taskActionCreators.addTask(data);
+    if (this.props.task.taskEditing) {
+      this.props.taskActionCreators.updateTask(data);
+    } else {
+      this.props.taskActionCreators.addTask(data);
+    }
   };
 
   render() {
@@ -25,6 +29,7 @@ class TaskForm extends Component {
       handleSubmit,
       invalid,
       submitting,
+      task: { taskEditing },
     } = this.props;
     const { hideModal } = modalActionCreators;
 
@@ -50,10 +55,11 @@ class TaskForm extends Component {
           className={classes.textField}
           component={renderSelectField}
         >
+          <MenuItem value=''>Select status</MenuItem>
           {STATUSES.map((status) => (
-            <option key={status.value} value={status.value}>
+            <MenuItem key={status.value} value={status.value}>
               {status.label}
-            </option>
+            </MenuItem>
           ))}
         </Field>
         <Field
@@ -75,7 +81,7 @@ class TaskForm extends Component {
             type='submit'
             disabled={invalid || submitting}
           >
-            Add
+            {taskEditing ? 'Update' : 'Add'}
           </Button>
         </Grid>
       </form>
@@ -90,11 +96,15 @@ TaskForm.propTypes = {
   }),
   taskActionCreators: PropTypes.shape({
     addTask: PropTypes.func,
+    updateTask: PropTypes.func,
   }),
   handleSubmit: PropTypes.func,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
   initialValues: PropTypes.object,
+  task: PropTypes.shape({
+    taskEditing: PropTypes.object,
+  }),
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -104,6 +114,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   initialValues: state.task.taskEditing,
+  task: state.task,
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

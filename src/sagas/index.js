@@ -9,7 +9,7 @@ import {
   takeEvery,
 } from 'redux-saga/effects';
 import * as taskTypes from '../contants/task';
-import { getList, addTask } from '../apis/task';
+import { getList, addTask, updateTask } from '../apis/task';
 import { STATUS_CODE } from '../contants';
 import {
   fetchListTaskSuccess,
@@ -18,6 +18,8 @@ import {
   addTaskSuccess,
   addTaskFailed,
   fetchListTask,
+  updateTaskSuccess,
+  updateTaskFailed,
 } from '../actions/task';
 import { showLoading, hideLoading } from '../actions/ui';
 import { hideModal } from '../actions/modal';
@@ -76,10 +78,21 @@ function* addTaskSaga({ payload }) {
   }
 }
 
+function* updateTaskSaga({ payload }) {
+  try {
+    const res = yield call(updateTask, payload.task);
+    yield put(updateTaskSuccess(res.data));
+  } catch (error) {
+    yield put(updateTaskFailed(error));
+  }
+  yield put(hideModal());
+}
+
 function* rootSaga() {
   yield fork(watchFetchListTaskAction);
   yield takeLatest(taskTypes.FILTER_TASK, filterTaskSaga);
   yield takeEvery(taskTypes.ADD_TASK, addTaskSaga);
+  yield takeEvery(taskTypes.UPDATE_TASK, updateTaskSaga);
 }
 
 export default rootSaga;

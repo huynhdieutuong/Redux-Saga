@@ -22,10 +22,9 @@ const renderSelectField = ({
   children,
   ...custom
 }) => (
-  <FormControl error={touched && error}>
+  <FormControl fullWidth error={touched && error}>
     <InputLabel htmlFor='color-native-simple'>{label}</InputLabel>
     <Select
-      native
       {...input}
       {...custom}
       inputProps={{

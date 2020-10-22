@@ -110,3 +110,30 @@ export const setTaskEditing = (task) => {
     },
   };
 };
+
+export const updateTask = (task) => {
+  return {
+    type: taskConstants.UPDATE_TASK,
+    payload: {
+      task,
+    },
+  };
+};
+
+export const updateTaskSuccess = (data) => {
+  return {
+    type: taskConstants.UPDATE_TASK_SUCCESS,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const updateTaskFailed = (error) => {
+  return {
+    type: taskConstants.UPDATE_TASK_FAILED,
+    payload: {
+      error,
+    },
+  };
+};

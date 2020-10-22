@@ -34,7 +34,8 @@ const reducer = (state = initialState, action) => {
         listTask: payload.data,
       };
     }
-    case taskConstants.ADD_TASK: {
+    case taskConstants.ADD_TASK:
+    case taskConstants.UPDATE_TASK: {
       return {
         ...state,
       };
@@ -45,7 +46,17 @@ const reducer = (state = initialState, action) => {
         listTask: state.listTask.concat([payload.data]),
       };
     }
-    case taskConstants.ADD_TASK_FAILED: {
+    case taskConstants.UPDATE_TASK_SUCCESS: {
+      return {
+        ...state,
+        taskEditing: null,
+        listTask: state.listTask.map((task) =>
+          task.id === payload.data.id ? payload.data : task
+        ),
+      };
+    }
+    case taskConstants.ADD_TASK_FAILED:
+    case taskConstants.UPDATE_TASK_FAILED: {
       toastError(payload.error);
       return {
         ...state,

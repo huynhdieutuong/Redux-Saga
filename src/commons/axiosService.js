@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios from 'axios';
 
 class AxiosService {
@@ -21,6 +22,10 @@ class AxiosService {
 
   post(url, body) {
     return this.instance.post(url, body);
+  }
+
+  put(url, body) {
+    return this.instance.put(url, body);
   }
 }
 
